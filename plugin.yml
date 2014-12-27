@@ -1,0 +1,66 @@
+name: ChatCensor
+main: ChatCensor\Main
+version: "1.4"
+api: [1.9.0]
+load: STARTUP
+author: EvolSoft
+description: Block swear words and limit characters in chat
+website: https://www.evolsoft.tk
+
+commands:
+ chatcensor:
+   aliases: [cc, chatc, censor]
+   description: ChatCensor commands.
+   permission: chatcensor
+ mute:
+   description: ChatCensor Mute command.
+   permission: chatcensor.commands.mute
+ unmute:
+   description: ChatCensor Unmute command.
+   permission: chatcensor.commands.unmute
+ addword:
+   description: ChatCensor AddWord command.
+   permission: chatcensor.commands.addword
+ removeword:
+   description: ChatCensor RemoveWord command.
+   permission: chatcensor.commands.removeword
+permissions:
+ chatcensor:
+  default: op
+  description: ChatCensor permissions.
+  children:
+   chatcensor.bypass:
+    default: op
+    description: Bypass ChatCensor permissions.
+    children:
+     chatcensor.bypass.char-check:
+      default: op
+      description: Bypass ChatCensor Char-Check permissions.
+     chatcensor.bypass.censor:
+      default: op
+      description: Bypass ChatCensor Censor permissions.
+ chatcensor.commands:
+  default: op 
+  description: ChatCensor commands permissions.
+  children:
+   chatcensor.commands.help:
+    default: op
+    description: ChatCensor command Help permission.
+   chatcensor.commands.info:
+    default: op
+    description: ChatCensor command Info permission.
+   chatcensor.commands.reload:
+    default: op
+    description: ChatCensor command Reload permission.
+   chatcensor.commands.mute:
+    default: op
+    description: ChatCensor command Mute permission.
+   chatcensor.commands.unmute:
+    default: op
+    description: ChatCensor command Unmute permission.
+   chatcensor.commands.addword:
+    default: op
+    description: ChatCensor command AddWord permission.
+   chatcensor.commands.removeword:
+    default: op
+    description: ChatCensor command RemoveWord permission.
