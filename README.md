@@ -41,8 +41,8 @@ You can also easily set actions for each word.
 
 **Add and configure a denied word:**
 
-1. Run the command "/addword <word>"
-2. Go to "ChatCensor/denied-words" directory and open the word file
+1. Run the command "/addword <word>"<br>
+2. Go to "ChatCensor/denied-words" directory and open the word file<br>
 This is a word config file:
 ```yaml
 ---
