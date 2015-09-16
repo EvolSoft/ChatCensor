@@ -32,7 +32,7 @@ class Unmute extends PluginBase implements CommandExecutor{
     	$fcmd = strtolower($cmd->getName());
     	switch($fcmd){
     		case "unmute":
-    			if($sender->hasPermission("chatcensor.command.unmute")){
+    			if($sender->hasPermission("chatcensor.commands.unmute")){
     				if(isset($args[0])){
     					$args[0] = strtolower($args[0]);
     					//Check if player exists
