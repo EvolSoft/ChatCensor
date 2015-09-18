@@ -32,7 +32,7 @@ class Mute extends PluginBase implements CommandExecutor{
     	$fcmd = strtolower($cmd->getName());
     	switch($fcmd){
     		case "mute":
-    			if($sender->hasPermission("chatcensor.command.mute")){
+    			if($sender->hasPermission("chatcensor.commands.mute")){
     				if(isset($args[0])){
     					$args[0] = strtolower($args[0]);
     					//Check if player exists

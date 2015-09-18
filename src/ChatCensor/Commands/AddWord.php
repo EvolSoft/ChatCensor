@@ -32,7 +32,7 @@ class AddWord extends PluginBase implements CommandExecutor{
     	$fcmd = strtolower($cmd->getName());
     	switch($fcmd){
     		case "addword":
-    			if($sender->hasPermission("chatcensor.command.addword")){
+    			if($sender->hasPermission("chatcensor.commands.addword")){
     				if(isset($args[0])){
     					$args[0] = strtolower($args[0]);
     					//Check if word exists
