@@ -58,7 +58,7 @@ class EventListener extends PluginBase implements Listener{
 							for($i = 0; $i < count($messagearray); $i++){
 								if(in_array($messagearray[$i], $allowedchr)==false){
 									if($this->cfg["char-check"]["log-to-player"] == true){
-										$player->sendMessage($this->plugin->translateColors("&", Main::PREFIX . "&cYou can't send this message: it contains invalid characters."));
+										$player->sendMessage($this->plugin->translateColors("&", Main::PREFIX . "&cYou can't send this message because it contains invalid characters."));
 									}
 									$status = 1;
 									$event->setCancelled(true);
@@ -78,7 +78,7 @@ class EventListener extends PluginBase implements Listener{
 						for($i = 0; $i < count($messagearray); $i++){
 							if(in_array($messagearray[$i], $allowedchr)==false){
 								if($this->cfg["char-check"]["log-to-player"] == true){
-									$player->sendMessage($this->plugin->translateColors("&", Main::PREFIX . "&cYou can't send this message: it contains invalid characters."));
+									$player->sendMessage($this->plugin->translateColors("&", Main::PREFIX . "&cYou can't send this message because it contains invalid characters."));
 								}
 								$status = 1;
 								$event->setCancelled(true);
@@ -135,7 +135,7 @@ class EventListener extends PluginBase implements Listener{
 							}
 							$event->setMessage($tempmessage);
 							if($result == 1){
-								$player->sendMessage($this->plugin->translateColors("&", Main::PREFIX . "&cNo Swearing!"));
+								$player->sendMessage($this->plugin->translateColors("&", Main::PREFIX . "&cYou're not allowed to say this word!"));
 							}
 						}
 					}else{
@@ -180,7 +180,7 @@ class EventListener extends PluginBase implements Listener{
 						}
 						$event->setMessage($tempmessage);
 						if($result == 1){
-							$player->sendMessage($this->plugin->translateColors("&", Main::PREFIX . "&cNo Swearing!"));
+							$player->sendMessage($this->plugin->translateColors("&", Main::PREFIX . "&cYou're not allowed to say this word!"));
 						}
 					}
 				}	
