@@ -29,7 +29,7 @@ class Main extends PluginBase{
 	const MAIN_WEBSITE = "http://www.evolsoft.tk";
 	//Other Const
 	//Prefix
-	const PREFIX = "&c[-&aChatCensor&c-] ";
+	const PREFIX = "&c[-&GLSG&c-] ";
 	
 	public $cfg;
 	
