@@ -22,7 +22,7 @@ PocketMine-MP 1.7dev API 3.0.0-ALPHA7, 3.0.0-ALPHA8, 3.0.0-ALPHA9, 3.0.0-ALPHA10
 
 ***This Plugin uses the New API. You can't install it on old versions of PocketMine.***
 
-With ChatCensor you can block swam words, you can limit characters in chat and you can mute players. (read documentation)<br>
+With ChatCensor you can block censored words, IP addresses, websites, spam, caps, set allowed and unallowed characters and mute/unmute players in chat. (read documentation)<br>
 You can also easily customize actions for each censored word.
 
 ***Features:***
@@ -155,7 +155,7 @@ unmuted: "{PREFIX} &cYou have been unmuted by &e{PLAYER}&c!"
 
 1. Run the command "/addword &lt;word&gt;"<br>
 2. Go to ChatCensor plugin directory and open "words.yml" file<br>
-3. Find the world in the list and customize its settings<br>
+3. Find the world in the list and customize its settings
 
 These are the censored word settings:
 
