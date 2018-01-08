@@ -55,7 +55,6 @@ Support the development of this plugin with a small donation by clicking [:dolla
 
 ```yaml
 ---
----
 # Censor settings
 censor:
  # Enable censor
