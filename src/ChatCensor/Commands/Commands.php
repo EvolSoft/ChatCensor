@@ -1,98 +1,79 @@
 <?php
 
 /*
- * ChatCensor (v1.4) by EvolSoft
+ * ChatCensor (v2.0) by EvolSoft
  * Developer: EvolSoft (Flavius12)
- * Website: http://www.evolsoft.tk
- * Date: 27/12/2014 03:44 PM (UTC)
- * Copyright & License: (C) 2014 EvolSoft
+ * Website: https://www.evolsoft.tk
+ * Date: 08/01/2018 01:39 PM (UTC)
+ * Copyright & License: (C) 2014-2018 EvolSoft
  * Licensed under MIT (https://github.com/EvolSoft/ChatCensor/blob/master/LICENSE)
  */
 
 namespace ChatCensor\Commands;
 
 use pocketmine\plugin\PluginBase;
-use pocketmine\permission\Permission;
 use pocketmine\command\Command;
 use pocketmine\command\CommandExecutor;
 use pocketmine\command\CommandSender;
-use pocketmine\Player;
-use pocketmine\utils\TextFormat;
 
-use ChatCensor\Main;
-use ChatCensor\EventListener;
+use ChatCensor\ChatCensor;
 
-class Commands extends PluginBase implements CommandExecutor{
+class Commands extends PluginBase implements CommandExecutor {
 
-	public function __construct(Main $plugin){
+    public function __construct(ChatCensor $plugin){
         $this->plugin = $plugin;
     }
     
-    public function onCommand(CommandSender $sender, Command $cmd, $label, array $args) {
-    	$fcmd = strtolower($cmd->getName());
-    	switch($fcmd){
-    		case "chatcensor":
-    			if(isset($args[0])){
-    				$args[0] = strtolower($args[0]);
-    				if($args[0]=="help"){
-    					if($sender->hasPermission("chatcensor.commands.help")){
-    						$sender->sendMessage($this->plugin->translateColors("&", "&c== &eAvailable Commands &c=="));
-    						$sender->sendMessage($this->plugin->translateColors("&", "&a/cc info &c->&e Show info about this plugin"));
-    						$sender->sendMessage($this->plugin->translateColors("&", "&a/cc help &c->&e Show help about this plugin"));
-    						$sender->sendMessage($this->plugin->translateColors("&", "&a/cc reload &c->&e Reload the config"));
-    						$sender->sendMessage($this->plugin->translateColors("&", "&a/addword &c->&e Add a denied word"));
-    						$sender->sendMessage($this->plugin->translateColors("&", "&a/removeword &c->&e Remove a denied word"));
-    						$sender->sendMessage($this->plugin->translateColors("&", "&a/mute &c->&e Mute player"));
-    						$sender->sendMessage($this->plugin->translateColors("&", "&a/unmute &c->&e Unmute player"));
-    						break;
-    					}else{
-    						$sender->sendMessage($this->plugin->translateColors("&", "&cYou don't have permissions to use this command"));
-    						break;
-    					}
-    				}elseif($args[0]=="info"){
-    					if($sender->hasPermission("chatcensor.commands.info")){
-    						$sender->sendMessage($this->plugin->translateColors("&", Main::PREFIX . "&eChatCensor &av" . Main::VERSION . " &edeveloped by&a " . Main::PRODUCER));
-    						$sender->sendMessage($this->plugin->translateColors("&", Main::PREFIX . "&eWebsite &a" . Main::MAIN_WEBSITE));
-    				        break;
-    					}else{
-    						$sender->sendMessage($this->plugin->translateColors("&", "&cYou don't have permissions to use this command"));
-    						break;
-    					}
-    				}elseif($args[0]=="reload"){
-    					if($sender->hasPermission("chatcensor.commands.reload")){
-    						$this->plugin->reloadConfig();
-    						$sender->sendMessage($this->plugin->translateColors("&", Main::PREFIX . "&aConfiguration Reloaded."));
-    				        break;
-    					}else{
-    						$sender->sendMessage($this->plugin->translateColors("&", "&cYou don't have permissions to use this command"));
-    						break;
-    					}
-    				}else{
-    					if($sender->hasPermission("chatcensor")){
-    						$sender->sendMessage($this->plugin->translateColors("&",  Main::PREFIX . "&cSubcommand &a" . $args[0] . " &cnot found. Use &a/cc help &cto show available commands"));
-    						break;
-    					}else{
-    						$sender->sendMessage($this->plugin->translateColors("&", "&cYou don't have permissions to use this command"));
-    						break;
-    					}
-    				}
-    				}else{
-    					if($sender->hasPermission("chatcensor.commands.help")){
-    						$sender->sendMessage($this->plugin->translateColors("&", "&c== &eAvailable Commands &c=="));
-    						$sender->sendMessage($this->plugin->translateColors("&", "&a/cc info &c->&e Show info about this plugin"));
-    						$sender->sendMessage($this->plugin->translateColors("&", "&a/cc help &c->&e Show help about this plugin"));
-    						$sender->sendMessage($this->plugin->translateColors("&", "&a/cc reload &c->&e Reload the config"));
-    						$sender->sendMessage($this->plugin->translateColors("&", "&a/addword &c->&e Add a denied word"));
-    						$sender->sendMessage($this->plugin->translateColors("&", "&a/removeword &c->&e Remove a denied word"));
-    						$sender->sendMessage($this->plugin->translateColors("&", "&a/mute &c->&e Mute player"));
-    						$sender->sendMessage($this->plugin->translateColors("&", "&a/unmute &c->&e Unmute player"));
-    						break;
-    					}else{
-    						$sender->sendMessage($this->plugin->translateColors("&", "&cYou don't have permissions to use this command"));
-    						break;
-    					}
-    				}
-    			}
+    public function onCommand(CommandSender $sender, Command $cmd, $label, array $args) : bool {
+        if(isset($args[0])){
+    		$args[0] = strtolower($args[0]);
+    		switch($args[0]){
+    		    case "help":
+			        goto help;
+			    case "info":
+			        if($sender->hasPermission("chatcensor.commands.info")){
+			            $sender->sendMessage($this->plugin->translateColors("&", ChatCensor::PREFIX . "&eChatCensor &av" . $this->plugin->getDescription()->getVersion() . "&e developed by &aEvolSoft"));
+			            $sender->sendMessage($this->plugin->translateColors("&", ChatCensor::PREFIX . "&eWebsite &a" . $this->plugin->getDescription()->getWebsite()));
+			            break;
+			        }
+			        $sender->sendMessage($this->plugin->translateColors("&", "&cYou don't have permissions to use this command"));
+			        break;
+			    case "reload":
+			        if($sender->hasPermission("chatcensor.commands.reload")){
+			            $this->plugin->reloadConfig();
+			            $this->plugin->muted->reload();
+			            $this->plugin->reloadWords();
+			            $this->plugin->reloadMessages();
+			            $sender->sendMessage($this->plugin->translateColors("&", ChatCensor::PREFIX . "&aConfiguration Reloaded."));
+			            break;
+			        }
+			        $sender->sendMessage($this->plugin->translateColors("&", "&cYou don't have permissions to use this command"));
+			        break;
+			    default:
+			        if($sender->hasPermission("chatcensor")){
+			            $sender->sendMessage($this->plugin->translateColors("&",  ChatCensor::PREFIX . "&cSubcommand &a" . $args[0] . " &cnot found. Use &a/cc help &cto show available commands."));
+			            break;
+			        }
+			        $sender->sendMessage($this->plugin->translateColors("&", "&cYou don't have permissions to use this command"));
+			        break; 
+			}
+			return true;
+		}else{
+		    help:
+    		if($sender->hasPermission("chatcensor.commands.help")){
+    			$sender->sendMessage($this->plugin->translateColors("&", "&c== &eAvailable Commands &c=="));
+    			$sender->sendMessage($this->plugin->translateColors("&", "&a/cc info &c->&e Show info about this plugin"));
+    			$sender->sendMessage($this->plugin->translateColors("&", "&a/cc help &c->&e Show help about this plugin"));
+    			$sender->sendMessage($this->plugin->translateColors("&", "&a/cc reload &c->&e Reload the config"));
+    			$sender->sendMessage($this->plugin->translateColors("&", "&a/addword &c->&e Add a censored word"));
+    			$sender->sendMessage($this->plugin->translateColors("&", "&a/removeword &c->&e Remove a censored word"));
+    			$sender->sendMessage($this->plugin->translateColors("&", "&a/mute &c->&e Mute a player"));
+    			$sender->sendMessage($this->plugin->translateColors("&", "&a/unmute &c->&e Unmute a player"));
+    			$sender->sendMessage($this->plugin->translateColors("&", "&a/listmuted &c->&e Get the list of muted players"));
+    			return true;
+    		}
+    		$sender->sendMessage($this->plugin->translateColors("&", "&cYou don't have permissions to use this command"));
+    		return true;
     	}
+    }
 }
-?>

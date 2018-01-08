@@ -1,10 +1,10 @@
 name: ChatCensor
-main: ChatCensor\Main
-version: "1.4"
-api: [1.9.0]
+main: ChatCensor\ChatCensor
+version: 2.0
+api: [3.0.0-ALPHA7, 3.0.0-ALPHA8, 3.0.0-ALPHA9, 3.0.0-ALPHA10]
 load: STARTUP
 author: EvolSoft
-description: Block swear words and limit characters in chat
+description: A powerful chat censoring plugin
 website: https://www.evolsoft.tk
 
 commands:
@@ -13,54 +13,66 @@ commands:
    description: ChatCensor commands.
    permission: chatcensor
  mute:
-   description: ChatCensor Mute command.
+   description: Mute a player.
    permission: chatcensor.commands.mute
  unmute:
-   description: ChatCensor Unmute command.
+   description: Unmute a player.
    permission: chatcensor.commands.unmute
+ listmuted:
+   description: Get the list of muted players.
+   permission: chatcensor.commands.listmuted
  addword:
-   description: ChatCensor AddWord command.
+   description: Add a censored word.
    permission: chatcensor.commands.addword
  removeword:
-   description: ChatCensor RemoveWord command.
+   description: Remove a censored word.
    permission: chatcensor.commands.removeword
 permissions:
  chatcensor:
   default: op
-  description: ChatCensor permissions.
+  description: ChatCensor permission tree.
   children:
    chatcensor.bypass:
     default: op
-    description: Bypass ChatCensor permissions.
+    description: Bypass ChatCensor features.
     children:
-     chatcensor.bypass.char-check:
-      default: op
-      description: Bypass ChatCensor Char-Check permissions.
      chatcensor.bypass.censor:
       default: op
-      description: Bypass ChatCensor Censor permissions.
+      description: Bypass ChatCensor censor feature.
+     chatcensor.bypass.anti-caps:
+      default: op
+      description: Bypass ChatCensor anti-caps feature.
+     chatcensor.bypass.char-check:
+      default: op
+      description: Bypass ChatCensor char-check feature.
+     chatcensor.bypass.anti-spam:
+      default: op
+      description: Bypass ChatCensor spam-check feature.
  chatcensor.commands:
-  default: op 
-  description: ChatCensor commands permissions.
+  default: op
+  description: ChatCensor commands permission tree.
   children:
    chatcensor.commands.help:
     default: op
-    description: ChatCensor command Help permission.
+    description: Let player read ChatCensor commands help.
    chatcensor.commands.info:
     default: op
-    description: ChatCensor command Info permission.
+    description: Let player read info about ChatCensor.
    chatcensor.commands.reload:
     default: op
-    description: ChatCensor command Reload permission.
-   chatcensor.commands.mute:
-    default: op
-    description: ChatCensor command Mute permission.
-   chatcensor.commands.unmute:
-    default: op
-    description: ChatCensor command Unmute permission.
+    description: Let player reload ChatCensor configuration.
    chatcensor.commands.addword:
     default: op
-    description: ChatCensor command AddWord permission.
+    description: Let player add a censored word.
    chatcensor.commands.removeword:
     default: op
-    description: ChatCensor command RemoveWord permission.
+    description: Let player remove a censored word.
+   chatcensor.commands.mute:
+    default: op
+    description: Let player mute a player.
+   chatcensor.commands.unmute:
+    default: op
+    description: Let player unmute a player.
+   chatcensor.commands.listmuted:
+    default: op
+    description: Let player show the list of muted players.

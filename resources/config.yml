@@ -1,88 +1,66 @@
 ---
+# Censor settings
 censor:
+ # Enable censor
  enabled: true
+ # Let players with chatcensor.bypass.censor permission bypass this restriction
  allow-bypassing: false
+ # Check bad words inside words (may slightly slow down your server)
+ advanced-mode: false
+ # Check commands
+ check-commands: false
+ # Log message to player
  log-to-player: true
+ # Block messages containing URLs (a message will be sent to the player if log-to-player is enabled)
+ block-urls: true
+ # Block messages containing IP addresses (a message will be sent to the player if log-to-player is enabled)
+ block-ips: true
+# Anti-caps settings
+anti-caps:
+ # Enable anti-caps
+ enabled: true
+ # Let players with chatcensor.bypass.anti-caps permission bypass this restriction
+ allow-bypassing: false
+ # Log message to player
+ log-to-player: true
+ # Block the message (if block-message is disabled, the message will be converted to lower case)
+ block-message: true
+# Anti-spam settings
+anti-spam:
+ # Enable anti-spam
+ enabled: true
+ # Let players with chatcensor.bypass.anti-spam permission bypass this restriction
+ allow-bypassing: false
+ # Log message to player
+ log-to-player: true
+ # Spam checking mode (0 = the same message can't be repeated, 1 = delayed spam checking, 2 = both)
+ mode: 1
+ # Delay (in seconds)
+ delay: 5
+# Mute/Unmute settings
 mute:
- log-to-player: true
+ # Log the mute message to the player
+ log-mute: true
+ # Log the unmute message to the player
  log-unmute: true
- keep-on-relogin: true
-char-check:
- enabled: true
- allow-bypassing: false
+ # Log message to player
  log-to-player: true
+ # Default mute time
+ time: "30m"
+# Characters/Message checking settings
+char-check:
+ # Enable characters/message checking
+ enabled: true
+ # Let players with chatcensor.bypass.char-check permission bypass this restriction
+ allow-bypassing: false
+ # Log message to player
+ log-to-player: true
+ # Maximum message length (set to 0 to disable this feature)
+ max-length: 0
+ # Allow backslash in messages
  allow-backslash: false
- allowed-chars:
-  - "Q"
-  - "W"
-  - "E"
-  - "R"
-  - "T"
-  - "Y"
-  - "U"
-  - "I"
-  - "O"
-  - "P"
-  - "A"
-  - "S"
-  - "D"
-  - "F"
-  - "G"
-  - "H"
-  - "J"
-  - "K"
-  - "L"
-  - "Z"
-  - "X"
-  - "C"
-  - "V"
-  - "B"
-  - "N"
-  - "M"
-  - "q"
-  - "w"
-  - "e"
-  - "r"
-  - "t"
-  - "y"
-  - "u"
-  - "i"
-  - "o"
-  - "p"
-  - "a"
-  - "s"
-  - "d"
-  - "f"
-  - "g"
-  - "h"
-  - "j"
-  - "k"
-  - "l"
-  - "z"
-  - "x"
-  - "c"
-  - "v"
-  - "b"
-  - "n"
-  - "m"
-  - "1"
-  - "2"
-  - "3"
-  - "4"
-  - "5"
-  - "6"
-  - "7"
-  - "8"
-  - "9"
-  - "0"
-  - "."
-  - ":"
-  - ","
-  - ";"
-  - "-"
-  - "_"
-  - "|"
-  - "!"
-  - "/"
-  - "?"
+ # Allowed characters in messages (set to "" to disable this feature)
+ allowed-chars: "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890.:,;-_|!/?"
+ # Unallowed characters in messages (set to "" to disable this feature)
+ unallowed-chars: ""
 ...

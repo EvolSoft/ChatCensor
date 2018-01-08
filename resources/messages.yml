@@ -1,0 +1,24 @@
+---
+# No URLs message
+no-urls: "{PREFIX} &cYou can't send URLs on messages!"
+# No IP addresses message
+no-ips: "{PREFIX} &cYou can't send IP addresses on messages!"
+# No swearing message
+no-swearing: "{PREFIX} &cPlease don't swear!"
+# No caps message
+no-caps: "{PREFIX} &cUppercase characters are not allowed on messages"
+# Invalid/Unallowed characters message
+invalid: "{PREFIX} &cYou can't send this message because it contains invalid characters"
+# Message too long message
+too-long: "{PREFIX} &cYou can't send this message because it's too long"
+# No spam message
+no-spam: "{PREFIX} &cPlease don't spam"
+# Spam delay message
+spam-delay: "{PREFIX} &cPlease wait &e{DELAY} seconds&c before sending another message"
+# Muted message (when the muted player tries to send a message)
+muted-error: "{PREFIX} &cYou can't send message because you are muted"
+# Muted message
+muted: "{PREFIX} &cYou have been muted for &e{DURATION}&c by &e{PLAYER}&c!"
+# Unmuted message
+unmuted: "{PREFIX} &cYou have been unmuted by &e{PLAYER}&c!"
+...
