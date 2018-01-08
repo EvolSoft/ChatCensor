@@ -156,6 +156,7 @@ unmuted: "{PREFIX} &cYou have been unmuted by &e{PLAYER}&c!"
 1. Run the command "/addword &lt;word&gt;"<br>
 2. Go to ChatCensor plugin directory and open "words.yml" file<br>
 3. Find the world in the list and customize its settings<br>
+
 These are the censored word settings:
 
 ```yaml
@@ -209,7 +210,7 @@ commands: []
 
 Almost all our plugins have API access to widely extend their features.
 
-To access ChatCensor API:
+To access ChatCensor API:<br>
 *1. Define the plugin dependency in plugin.yml (you can check if ChatCensor is installed in different ways):*
 
 ```yaml
