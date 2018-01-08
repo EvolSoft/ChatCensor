@@ -168,7 +168,6 @@ class EventListener extends PluginBase implements Listener {
 				        return;
 				    }
 				    if($this->plugin->wordExists($word, $key)){
-				        echo "Bad: " . $key . "\n";
 						//Check Word Config
 				        $tmp = $this->plugin->getWord($word);
 						if($tmp["delete-message"]){
