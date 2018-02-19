@@ -10,19 +10,11 @@ PocketMine-MP plugins
 
 ## Requirements
 
-PocketMine-MP 1.7dev API 3.0.0-ALPHA7, 3.0.0-ALPHA8, 3.0.0-ALPHA9, 3.0.0-ALPHA10
+PocketMine-MP 1.7dev API 3.0.0-ALPHA7 -> 3.0.0-ALPHA11
 
 ## Overview
 
 **ChatCensor** let you block censored words, IP addresses, websites, spam, caps, set allowed and unallowed characters and mute/unmute players in chat.
-
-**EvolSoft Website:** https://www.evolsoft.tk
-
-***To prevent bugs, delete all old plugin data if you are updating ChatCensor.***
-
-***This Plugin uses the New API. You can't install it on old versions of PocketMine.***
-
-With ChatCensor you can block censored words, IP addresses, websites, spam, caps, set allowed and unallowed characters and mute/unmute players in chat. (read documentation)<br>
 You can also easily customize actions for each censored word.
 
 ***Features:***
@@ -36,18 +28,14 @@ You can also easily customize actions for each censored word.
 - *Allowed/Unallowed characters:* limit allowed characters on messages
 - Customizable user-side messages
 
-**Commands:**
+**EvolSoft Website:** https://www.evolsoft.tk
 
-***/chatcensor*** *- ChatCensor commands*<br>
-***/addword*** *- Add a denied-word*<br>
-***/removeword*** *- Remove a denied-word*<br>
-***/mute*** *- Mute player*<br>
-***/unmute*** *- Unmute player*<br>
-***/listmuted*** *- Get the list of muted players*
+***This Plugin uses the New API. You can't install it on old versions of PocketMine.***
 
 ## Donate
 
-Support the development of this plugin with a small donation by clicking [:dollar: here](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=flavius.c.1999@gmail.com&lc=US&item_name=www.evolsoft.tk&no_note=0&cn=&curency_code=EUR&bn=PP-DonationsBF:btn_donateCC_LG.gif:NonHosted). Thank you :smile:
+Please support the development of this plugin with a small donation by clicking [:dollar: here](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=flavius.c.1999@gmail.com&lc=US&item_name=www.evolsoft.tk&no_note=0&cn=&curency_code=EUR&bn=PP-DonationsBF:btn_donateCC_LG.gif:NonHosted). 
+Your small donation will help me paying web hosting, domains, buying programs (such as IDEs, debuggers, etc...) and new hardware to improve software development. Thank you :smile:
 
 ## Documentation
 

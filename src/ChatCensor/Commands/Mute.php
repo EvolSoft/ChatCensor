@@ -1,10 +1,10 @@
 <?php
 
 /*
- * ChatCensor (v2.0) by EvolSoft
+ * ChatCensor (v2.1) by EvolSoft
  * Developer: EvolSoft (Flavius12)
  * Website: https://www.evolsoft.tk
- * Date: 08/01/2018 01:38 PM (UTC)
+ * Date: 19/02/2018 12:44 AM (UTC)
  * Copyright & License: (C) 2014-2018 EvolSoft
  * Licensed under MIT (https://github.com/EvolSoft/ChatCensor/blob/master/LICENSE)
  */
@@ -28,17 +28,15 @@ class Mute extends PluginBase implements CommandExecutor {
 		if($sender->hasPermission("chatcensor.commands.mute")){
 			if(isset($args[0])){
 				$args[0] = strtolower($args[0]);
-				//Check if player exists
 				if($this->plugin->getServer()->getPlayer($args[0]) != null){
 					$player = $args[0];
-					//Check if player is already muted
 					if($this->plugin->isMuted($player)){
-					    $sender->sendMessage($this->plugin->translateColors("&", Main::PREFIX . "&cPlayer " . $player . " is already muted!"));
+					    $sender->sendMessage($this->plugin->translateColors("&", ChatCensor::PREFIX . "&cPlayer " . $player . " is already muted!"));
 					    return true;
 					}
 					$time = $args;
-					unset($time[0]); //Remove player from arguments
-					$time = implode($time); //Build the string
+					unset($time[0]);
+					$time = implode($time);
 					if($time == null){
 					    $time = $this->plugin->cfg->getAll()["mute"]["time"];
 					}

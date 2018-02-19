@@ -1,7 +1,7 @@
 <?php
 
 /*
- * ChatCensor (v2.0) by EvolSoft
+ * ChatCensor (v2.1) by EvolSoft
  * Developer: EvolSoft (Flavius12)
  * Website: https://www.evolsoft.tk
  * Date: 08/01/2018 01:38 PM (UTC)
