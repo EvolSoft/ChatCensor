@@ -1,11 +1,10 @@
 <?php
 
 /*
- * ChatCensor (v2.2) by EvolSoft
- * Developer: EvolSoft (Flavius12)
+ * ChatCensor v2.3 by EvolSoft
+ * Developer: Flavius12
  * Website: https://www.evolsoft.tk
- * Date: 08/01/2018 04:05 PM (UTC)
- * Copyright & License: (C) 2014-2018 EvolSoft
+ * Copyright (C) 2014-2018 EvolSoft
  * Licensed under MIT (https://github.com/EvolSoft/ChatCensor/blob/master/LICENSE)
  */
 
@@ -13,15 +12,16 @@ namespace ChatCensor;
 
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
-use pocketmine\utils\TextFormat;
-use const pocketmine\API_VERSION;
 
 class ChatCensor extends PluginBase {
     
     /** @var string */
-	const PREFIX = "&c[-&aChatCensor&c-] ";
+	const PREFIX = "&c[-&aChatCensor&c-]";
 	
-	/** @var Config */
+	/** @var string */
+	const API_VERSION = "2.0";
+	
+	/** @var array */
 	public $cfg;
 	
 	/** @var Config */
@@ -33,59 +33,12 @@ class ChatCensor extends PluginBase {
 	/** @var Config */
 	private $messages;
 	
-	/** @var float */
-	const API_VERSION = 1.0;
-	
-	/** @var ChatCensor $object */
-	private static $object = null;
-	
-	/**
-	 * Get ChatCensor API
-	 *
-	 * @return ChatCensor
-	 */
-	public static function getAPI() : ChatCensor {
-	    return self::$object;
-	}
-	
-	/**
-	 * Translate Minecraft colors
-	 * 
-	 * @param string $symbol
-	 * @param string $message
-	 * 
-	 * @return string
-	 */
-	public function translateColors($symbol, $message){
-	    $message = str_replace($symbol . "0", TextFormat::BLACK, $message);
-	    $message = str_replace($symbol . "1", TextFormat::DARK_BLUE, $message);
-	    $message = str_replace($symbol . "2", TextFormat::DARK_GREEN, $message);
-	    $message = str_replace($symbol . "3", TextFormat::DARK_AQUA, $message);
-	    $message = str_replace($symbol . "4", TextFormat::DARK_RED, $message);
-	    $message = str_replace($symbol . "5", TextFormat::DARK_PURPLE, $message);
-	    $message = str_replace($symbol . "6", TextFormat::GOLD, $message);
-	    $message = str_replace($symbol . "7", TextFormat::GRAY, $message);
-	    $message = str_replace($symbol . "8", TextFormat::DARK_GRAY, $message);
-	    $message = str_replace($symbol . "9", TextFormat::BLUE, $message);
-	    $message = str_replace($symbol . "a", TextFormat::GREEN, $message);
-	    $message = str_replace($symbol . "b", TextFormat::AQUA, $message);
-	    $message = str_replace($symbol . "c", TextFormat::RED, $message);
-	    $message = str_replace($symbol . "d", TextFormat::LIGHT_PURPLE, $message);
-	    $message = str_replace($symbol . "e", TextFormat::YELLOW, $message);
-	    $message = str_replace($symbol . "f", TextFormat::WHITE, $message);
-	    
-	    $message = str_replace($symbol . "k", TextFormat::OBFUSCATED, $message);
-	    $message = str_replace($symbol . "l", TextFormat::BOLD, $message);
-	    $message = str_replace($symbol . "m", TextFormat::STRIKETHROUGH, $message);
-	    $message = str_replace($symbol . "n", TextFormat::UNDERLINE, $message);
-	    $message = str_replace($symbol . "o", TextFormat::ITALIC, $message);
-	    $message = str_replace($symbol . "r", TextFormat::RESET, $message);
-	    return $message;
-	}
+	/** @var ChatCensor */
+	private static $instance = null;
 	
 	public function onLoad(){
-	    if(!(self::$object instanceof ChatCensor)){
-	        self::$object = $this;
+	    if(!(self::$instance instanceof ChatCensor)){
+	        self::$instance = $this;
 	    }
 	}
 	
@@ -96,7 +49,7 @@ class ChatCensor extends PluginBase {
 		$this->words = new Config($this->getDataFolder() . "words.yml", Config::YAML);
 		$this->muted = new Config($this->getDataFolder() . "muted.yml", Config::YAML);
 		$this->messages = new Config($this->getDataFolder() . "messages.yml", Config::YAML);
-		$this->cfg = $this->getConfig();
+		$this->cfg = $this->getConfig()->getAll();
 		$this->getCommand("chatcensor")->setExecutor(new Commands\Commands($this));
 		$this->getCommand("addword")->setExecutor(new Commands\AddWord($this));
 		$this->getCommand("removeword")->setExecutor(new Commands\RemoveWord($this));
@@ -104,6 +57,24 @@ class ChatCensor extends PluginBase {
 		$this->getCommand("unmute")->setExecutor(new Commands\Unmute($this));
 		$this->getCommand("listmuted")->setExecutor(new Commands\ListMuted($this));
 		$this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
+	}
+	
+	/**
+	 * Get ChatCensor API
+	 *
+	 * @return ChatCensor
+	 */
+	public static function getAPI(){
+	    return self::$instance;
+	}
+	
+	/**
+	 * Get ChatCensor version
+	 *
+	 * @return string
+	 */
+	public function getVersion(){
+	    return $this->getVersion();
 	}
 	
 	/**
@@ -116,12 +87,23 @@ class ChatCensor extends PluginBase {
 	}
 	
 	/**
+	 * Reload ChatCensor configuration
+	 */
+	public function reload(){
+	    $this->reloadConfig();
+	    $this->cfg = $this->getConfig()->getAll();
+	    $this->muted->reload();
+	    $this->words->reload();
+	    $this->messages->reload();
+	}
+	
+	/**
 	 * Get the list of allowed characters
 	 * 
 	 * @return string
 	 */
 	public function getAllowedChars(){
-	    return $this->getConfig()->getAll()["char-check"]["allowed-chars"];
+	    return $this->cfg["char-check"]["allowed-chars"];
 	}
 	
 	/**
@@ -130,7 +112,7 @@ class ChatCensor extends PluginBase {
 	 * @return string
 	 */
 	public function getUnallowedChars(){
-	    return $this->getConfig()->getAll()["char-check"]["unallowed-chars"];
+	    return $this->cfg["char-check"]["unallowed-chars"];
 	}
 	
 	/**
@@ -141,14 +123,14 @@ class ChatCensor extends PluginBase {
 	 * @return array|bool
 	 */
 	public function getWord($word){
-	    if($this->cfg->getAll()["censor"]["advanced-mode"]){
+	    if($this->cfg["censor"]["advanced-mode"]){
 	        if($this->wordExists($word, $k)){
-	            return $this->words->getAll()[$k];
+	            return $this->words->get($k);
 	        }
 	        return false;
 	    }
 	    if($this->wordExists($word)){
-	        return $this->words->getAll()[$word];
+	        return $this->words->get($word);
 	    }
 	    return false;
 	}
@@ -162,7 +144,7 @@ class ChatCensor extends PluginBase {
 	 * @return bool
 	 */
 	public function wordExists($word, &$k = null) : bool {
-	    if($this->cfg->getAll()["censor"]["advanced-mode"]){
+	    if($this->cfg["censor"]["advanced-mode"]){
 	        foreach($this->words->getAll() as $key => $value){
 	            if(strpos($word, $key) !== false){
 	                $k = $key;
@@ -172,7 +154,7 @@ class ChatCensor extends PluginBase {
 	        return false;
 	    }
 	    $k = $word;
-	    return isset($this->words->getAll()[$word]);
+	    return $this->words->exists($word);
 	}
 	
 	/**
@@ -279,21 +261,7 @@ class ChatCensor extends PluginBase {
 	        return $this->messages->get($id);
 	    }
 	}
-	
-	/**
-	 * Reload ChatCensor messages
-	 */
-	public function reloadMessages(){
-	    $this->messages->reload();
-	}
-	
-	/**
-	 * Reload words configuration
-	 */
-	public function reloadWords(){
-	    $this->words->reload();
-	}
-	
+
 	/**
 	 * Replace variables inside a string
 	 *

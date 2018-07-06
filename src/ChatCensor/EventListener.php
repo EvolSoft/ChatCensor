@@ -1,11 +1,10 @@
 <?php
 
 /*
- * ChatCensor (v2.2) by EvolSoft
- * Developer: EvolSoft (Flavius12)
+ * ChatCensor v2.3 by EvolSoft
+ * Developer: Flavius12
  * Website: https://www.evolsoft.tk
- * Date: 08/01/2018 01:37 PM (UTC)
- * Copyright & License: (C) 2014-2018 EvolSoft
+ * Copyright (C) 2014-2018 EvolSoft
  * Licensed under MIT (https://github.com/EvolSoft/ChatCensor/blob/master/LICENSE)
  */
 
@@ -14,16 +13,19 @@ namespace ChatCensor;
 use pocketmine\command\ConsoleCommandSender;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerCommandPreprocessEvent;
-use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
+use pocketmine\utils\TextFormat;
 
-class EventListener extends PluginBase implements Listener {
+class EventListener implements Listener {
+    
+    /** @var ChatCensor */
+    private $plugin;
     
     private $lastmessage;
-	
-	public function __construct(ChatCensor $plugin){
-		$this->plugin = $plugin;
-	}
+    
+    public function __construct(ChatCensor $plugin){
+        $this->plugin = $plugin;
+    }
 	
 	/**
 	 * @param PlayerCommandPreprocessEvent $event
@@ -31,7 +33,7 @@ class EventListener extends PluginBase implements Listener {
 	public function onChat(PlayerCommandPreprocessEvent $event){
 		$message = $event->getMessage();
 		$player = $event->getPlayer();
-		$cfg = $this->plugin->getConfig()->getAll();
+		$cfg = $this->plugin->cfg;
 		//Check if this is a command and skip if check-commands is disabled
 		if($message[0] == "/" && !$cfg["censor"]["check-commands"]){
 		    return;
@@ -39,7 +41,7 @@ class EventListener extends PluginBase implements Listener {
 		//Check if player is muted
 		if($this->plugin->isMuted(strtolower($player->getName())) && $message[0] != "/"){
 			if($cfg["mute"]["log-to-player"]){
-			    $player->sendMessage($this->plugin->translateColors("&", $this->plugin->replaceVars($this->plugin->getMessage("muted-error"), array("PREFIX" => ChatCensor::PREFIX))));
+			    $player->sendMessage(TextFormat::colorize($this->plugin->replaceVars($this->plugin->getMessage("muted-error"), array("PREFIX" => ChatCensor::PREFIX))));
 			}
 			$event->setCancelled(true);
 			return;
@@ -52,7 +54,7 @@ class EventListener extends PluginBase implements Listener {
 		    if(preg_match('/[A-Z]/', $message)){
 		        if($cfg["anti-caps"]["block-message"]){
 		            if($cfg["anti-caps"]["log-to-player"]){
-		                $player->sendMessage($this->plugin->translateColors("&", $this->plugin->replaceVars($this->plugin->getMessage("no-caps"), array("PREFIX" => ChatCensor::PREFIX))));
+		                $player->sendMessage(TextFormat::colorize($this->plugin->replaceVars($this->plugin->getMessage("no-caps"), array("PREFIX" => ChatCensor::PREFIX))));
 		            }
 		            $event->setCancelled(true);
 		            return;
@@ -70,16 +72,17 @@ class EventListener extends PluginBase implements Listener {
     		        if($cfg["anti-spam"]["mode"] == 0 || $cfg["anti-spam"]["mode"] == 2){
 	                    if(strcasecmp($message, $this->lastmessage[$player->getName()]["message"]) == 0){
 	                        if($cfg["anti-spam"]["log-to-player"]){
-	                            $player->sendMessage($this->plugin->translateColors("&", $this->plugin->replaceVars($this->plugin->getMessage("no-spam"), array("PREFIX" => ChatCensor::PREFIX))));
+	                            $player->sendMessage(TextFormat::colorize($this->plugin->replaceVars($this->plugin->getMessage("no-spam"), array("PREFIX" => ChatCensor::PREFIX))));
 	                        }
 	                        $event->setCancelled(true);
 	                        return;
 	                    }
     		        }
     		        if($cfg["anti-spam"]["mode"] == 1 || $cfg["anti-spam"]["mode"] == 2){
-		                if(time() - $this->lastmessage[$player->getName()]["time"] <= $cfg["anti-spam"]["delay"]){
+    		            $t = time() - $this->lastmessage[$player->getName()]["time"];
+		                if($t < $cfg["anti-spam"]["delay"]){
 		                    if($cfg["anti-spam"]["log-to-player"]){
-		                        $player->sendMessage($this->plugin->translateColors("&", $this->plugin->replaceVars($this->plugin->getMessage("spam-delay"), array("PREFIX" => ChatCensor::PREFIX, "DELAY" => time() - $this->lastmessage[$player->getName()]["time"]))));
+		                        $player->sendMessage(TextFormat::colorize($this->plugin->replaceVars($this->plugin->getMessage("spam-delay"), array("PREFIX" => ChatCensor::PREFIX, "DELAY" => $cfg["anti-spam"]["delay"] - $t))));
 		                    }
 		                    $event->setCancelled(true);
 		                    return;
@@ -97,7 +100,7 @@ class EventListener extends PluginBase implements Listener {
     			//Check message length
     			if($cfg["char-check"]["max-length"] > 0 && strlen($message) > $cfg["char-check"]["max-length"]){
     			    if($cfg["char-check"]["log-to-player"]){
-    			        $player->sendMessage($this->plugin->translateColors("&", $this->plugin->replaceVars($this->plugin->getMessage("too-long"), array("PREFIX" => ChatCensor::PREFIX))));
+    			        $player->sendMessage(TextFormat::colorize($this->plugin->replaceVars($this->plugin->getMessage("too-long"), array("PREFIX" => ChatCensor::PREFIX))));
     			    }
     			    $event->setCancelled(true);
     			    return;
@@ -106,7 +109,7 @@ class EventListener extends PluginBase implements Listener {
     			if(!$cfg["char-check"]["allow-backslash"]){
     			    if((bool) strpbrk($message, "\\")){
     			        if($cfg["char-check"]["log-to-player"]){
-    			            $player->sendMessage($this->plugin->translateColors("&", $this->plugin->replaceVars($this->plugin->getMessage("invalid"), array("PREFIX" => ChatCensor::PREFIX))));
+    			            $player->sendMessage(TextFormat::colorize($this->plugin->replaceVars($this->plugin->getMessage("invalid"), array("PREFIX" => ChatCensor::PREFIX))));
     			        }
     			        $event->setCancelled(true);
     			        return;
@@ -117,7 +120,7 @@ class EventListener extends PluginBase implements Listener {
     			if($unallowed != ""){
     			    if((bool) strpbrk($message, $unallowed)){
     			        if($cfg["char-check"]["log-to-player"]){
-    			            $player->sendMessage($this->plugin->translateColors("&", $this->plugin->replaceVars($this->plugin->getMessage("invalid"), array("PREFIX" => ChatCensor::PREFIX))));
+    			            $player->sendMessage(TextFormat::colorize($this->plugin->replaceVars($this->plugin->getMessage("invalid"), array("PREFIX" => ChatCensor::PREFIX))));
     			        }
     			        $event->setCancelled(true);
     			        return;
@@ -132,7 +135,7 @@ class EventListener extends PluginBase implements Listener {
     			    foreach($messagearray as $word){
     			        if(!in_array($word, $allowedchr)){
     			            if($cfg["char-check"]["log-to-player"]){
-    			                $player->sendMessage($this->plugin->translateColors("&", $this->plugin->replaceVars($this->plugin->getMessage("invalid"), array("PREFIX" => ChatCensor::PREFIX))));
+    			                $player->sendMessage(TextFormat::colorize($this->plugin->replaceVars($this->plugin->getMessage("invalid"), array("PREFIX" => ChatCensor::PREFIX))));
     			            }
     			            $event->setCancelled(true);
     			            return;
@@ -152,7 +155,7 @@ class EventListener extends PluginBase implements Listener {
 				//Check if websites are blocked
 				if($cfg["censor"]["block-urls"] && preg_match("/\w+(\s+)?\.(\s+)?\w+(\s+)?\.(\s+)?\w+/i", $message)){
 				    if($cfg["censor"]["log-to-player"]){
-				        $player->sendMessage($this->plugin->translateColors("&", $this->plugin->replaceVars($this->plugin->getMessage("no-urls"), array("PREFIX" => ChatCensor::PREFIX))));
+				        $player->sendMessage(TextFormat::colorize($this->plugin->replaceVars($this->plugin->getMessage("no-urls"), array("PREFIX" => ChatCensor::PREFIX))));
 				    }
 				    $event->setCancelled(true);
 				    return;
@@ -162,7 +165,7 @@ class EventListener extends PluginBase implements Listener {
 				    //Check if IP addresses are blocked
 				    if($cfg["censor"]["block-ips"] && (filter_var($word, FILTER_VALIDATE_IP) != false)){
 				        if($cfg["censor"]["log-to-player"]){
-				            $player->sendMessage($this->plugin->translateColors("&", $this->plugin->replaceVars($this->plugin->getMessage("no-ips"), array("PREFIX" => ChatCensor::PREFIX))));
+				            $player->sendMessage(TextFormat::colorize($this->plugin->replaceVars($this->plugin->getMessage("no-ips"), array("PREFIX" => ChatCensor::PREFIX))));
 				        }
 				        $event->setCancelled(true);
 				        return;
@@ -178,7 +181,7 @@ class EventListener extends PluginBase implements Listener {
 							$tempmessage = str_replace($key, $replace, $tempmessage);
 						}
 						if($cfg["censor"]["log-to-player"]){
-						    $player->sendMessage($this->plugin->translateColors("&", $this->plugin->replaceVars($this->plugin->getMessage("no-swearing"), array("PREFIX" => ChatCensor::PREFIX))));
+						    $player->sendMessage(TextFormat::colorize($this->plugin->replaceVars($this->plugin->getMessage("no-swearing"), array("PREFIX" => ChatCensor::PREFIX))));
 						}
 					    foreach($tmp["commands"] as $cmd){
 					        $cmd = $this->plugin->replaceVars($cmd, array("PLAYER" => $player->getName()));
